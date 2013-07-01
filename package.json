@@ -22,7 +22,8 @@
     },
     "dependencies": {
         "yeoman-generator": "~0.12.0",
-        "cordova": "2.9.0"
+        "cordova": "~2.9.0",
+        "shelljs": "~0.1.4"
     },
     "devDependencies": {
         "mocha": "~1.10.0"

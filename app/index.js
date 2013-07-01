@@ -3,6 +3,7 @@ var util = require('util');
 var path = require('path');
 var yeoman = require('yeoman-generator');
 var cordova = require('cordova');
+var shell = require('shelljs');
 
 var CordovaGenerator = module.exports = function CordovaGenerator(args, options, config) {
     yeoman.generators.Base.apply(this, arguments);
@@ -84,5 +85,5 @@ CordovaGenerator.prototype.app = function app() {
 CordovaGenerator.prototype.projectfiles = function projectfiles() {
     this.copy('editorconfig', '.editorconfig');
     this.copy('jshintrc', '.jshintrc');
-    this.template('Gruntfile.js');
+    this.copy('Gruntfile.js');
 };
