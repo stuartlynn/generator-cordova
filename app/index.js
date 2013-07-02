@@ -3,13 +3,41 @@ var util = require('util');
 var path = require('path');
 var yeoman = require('yeoman-generator');
 var cordova = require('cordova');
-var shell = require('shelljs');
+var colors = require('colors');
 
 var CordovaGenerator = module.exports = function CordovaGenerator(args, options, config) {
     yeoman.generators.Base.apply(this, arguments);
 
     this.on('end', function () {
-        this.installDependencies({ skipInstall: options['skip-install'] });
+        var howTo = '\n' +
+            '\nAwesome!'.yellow + ' yeoman should now have scaffolded a cordova framework for you.' +
+            '\n' +
+            '\n  You can add more plaforms to cordova using: ' + '`cordova platform add <platform>`'.cyan +
+            '\n' +
+            '\n  To build and emulate all installed platforms, run:' +
+            '\n' +
+            '\n      `grunt emulate`'.cyan +
+            '\n' +
+            '\n  To build and emulate all installed platforms, watching for changes and rebuilding/deploying the emulator:' +
+            '\n' +
+            '\n      `grunt liveemulate`'.cyan +
+            '\n' +
+            '\n  To set a specific platform to emulate, run with the following options:' +
+            '\n' +
+            '\n      `--platform`'.cyan + ': sets a platform to build/emulate. eg. ' + '`--platform=ios`'.cyan +
+            '\n      `--family`'.cyan + ': sets a family to build/emulate. eg. ' + '`--family=ipad`'.cyan +
+            '\n' +
+            '\n  For example, to build and emulate the ' + '`ios`'.magenta + ' platform using the ' + '`ipad`'.magenta + ' family:' +
+            '\n' +
+            '\n      `grunt liveemulate --platform='.cyan + 'ios'.magenta + ' --family='.cyan + 'ipad'.magenta + '`'.cyan +
+            '\n';
+
+        this.installDependencies({
+            skipInstall: options['skip-install'],
+            callback: function () {
+                console.log(howTo);
+            }
+        });
     });
 
     this.pkg = JSON.parse(this.readFileAsString(path.join(__dirname, '../package.json')));
