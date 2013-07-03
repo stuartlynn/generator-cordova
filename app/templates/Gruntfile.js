@@ -7,8 +7,7 @@ module.exports = function (grunt) {
 
     // configurable paths
     var yeomanConfig = {
-        app: 'www',
-        dist: 'dist'
+        app: 'www'
     };
 
     try {
@@ -35,26 +34,59 @@ module.exports = function (grunt) {
                 }
             }
         },
+        watchfiles: {
+            all: [
+                'www/{,*/}*.html',
+                'www/js/{,*/,*/}*.js',
+                'www/css/{,*/}*.css',
+                'www/img/{,*/}*.{png,jpg,jpeg,gif,webp,svg}'
+            ]
+        },
         watch: {
             scripts: {
-                files: ['<%%= jshint.files %>'],
+                files: [
+                    'www/js/**/*.js',
+                    'www/css/**/*.css'
+                ],
                 tasks: ['jshint']
             },
-            livereload: {
-                files: ['<%%= jshint.files %>'],
+            liveserve: {
+                options: {
+                    livereload: true,
+                },
+                files: ['<%%=watchfiles.all %>'],
+                tasks: ['shell:serveend', 'cordova-prepareserve']
+            },
+            liveemulate: {
+                files: ['<%%=watchfiles.all %>'],
                 tasks: ['cordova-emulate-end', 'cordova-buildemulate']
             }
         },
         shell: {
             iossimstart: {
-                command: 'ios-sim launch platforms/ios/build/HelloCordova.app --exit' + (device.family !== 'default' ? ' --family ' + device.family : ''),
+                command: 'ios-sim launch platforms/ios/build/<%= appName %>.app --exit' + (device.family !== 'default' ? ' --family ' + device.family : ''),
                 options: {
                     stdout: true
                 }
             },
             iossimend: {
                 command: 'killall -9 "iPhone Simulator"'
+            },
+            serveend: {
+                command: 'killall -9 "cordova serve"'
             }
+        }
+    });
+
+    // Cordova Tasks
+    grunt.registerTask('cordova-prepare', 'Cordova prepare tasks', function () {
+        var done = this.async();
+
+        if (device.platform === 'all') {
+            // Prepare all platforms
+            cordova.prepare(done);
+        } else {
+            cordova.prepare(device.platform, done);
         }
     });
 
@@ -83,9 +115,21 @@ module.exports = function (grunt) {
                     grunt.task.run('cordova-emulate-end');
                 });
             }
-       }
+        }
 
-       done();
+        done();
+    });
+
+    grunt.registerTask('cordova-serve', 'Cordova serve tasks', function () {
+        var done = this.async();
+
+        if (device.platform === 'all') {
+            // Emulate all platforms
+            grunt.fatal("Platform required. Eg. ` --platform=ios`");
+        } else {
+            cordova.serve(device.platform);
+            done();
+        }
     });
 
     grunt.registerTask('cordova-emulate-end', 'Cordova emulation tasks', function () {
@@ -94,16 +138,19 @@ module.exports = function (grunt) {
         }
     });
 
-
-    grunt.registerTask('test', ['jshint']);
-
     grunt.registerTask('cordova-buildemulate', [
         'cordova-build',
         'cordova-emulate'
     ]);
 
-    grunt.registerTask('emulate', ['cordova-buildemulate']);
-    grunt.registerTask('liveemulate', ['cordova-buildemulate', 'watch:livereload'])
+    grunt.registerTask('cordova-prepareserve', [
+        'cordova-prepare',
+        'cordova-serve'
+    ]);
 
-    grunt.registerTask('default', ['test']);
+    grunt.registerTask('serve', ['cordova-prepareserve', 'watch:liveserve'])
+    grunt.registerTask('emulate', ['cordova-buildemulate']);
+    grunt.registerTask('liveemulate', ['cordova-buildemulate', 'watch:liveemulate'])
+
+    grunt.registerTask('default', ['jshint']);
 };

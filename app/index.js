@@ -14,11 +14,16 @@ var CordovaGenerator = module.exports = function CordovaGenerator(args, options,
             '\n' +
             '\n  You can add more plaforms to cordova using: ' + '`cordova platform add <platform>`'.cyan +
             '\n' +
+            '\n  To deploy as local web server and watch for changes requires the installation of ' + 'http://livereload.com/'.magenta + ' browser extension.' +
+            '\n  This prepares and serves the application as a local web server to ' + 'http://localhost:8000/'.magenta + ', watching for changes then preparing/redeploying the web server.' +
+            '\n' +
+            '\n      `grunt serve --platform=ios`'.cyan +
+            '\n' +
             '\n  To build and emulate all installed platforms, run:' +
             '\n' +
             '\n      `grunt emulate`'.cyan +
             '\n' +
-            '\n  To build and emulate all installed platforms, watching for changes and rebuilding/deploying the emulator:' +
+            '\n  To build and emulate all installed platforms, watching for changes then building/redeploying the emulator:' +
             '\n' +
             '\n      `grunt liveemulate`'.cyan +
             '\n' +
@@ -96,9 +101,18 @@ CordovaGenerator.prototype.cordovaCreate = function cordovaCreate() {
 
 CordovaGenerator.prototype.cordovaAddPlatforms = function cordovaAddPlatforms() {
     if (this.platforms.length > 0) {
+        var done = this.async();
+
         console.log("Adding cordova platforms: " + this.platforms.join(', '));
 
-        cordova.platform('add', this.platforms, this.async());
+        cordova.platform('add', this.platforms, function(err) {
+            if(err) {
+                console.log('Hmm. It looks like you need to install an SDK: '.yellow + err.red);
+                process.exit(1);
+            }
+
+            done();
+        });
     }
 };
 
