@@ -127,5 +127,6 @@ CordovaGenerator.prototype.app = function app() {
 CordovaGenerator.prototype.projectfiles = function projectfiles() {
     this.copy('editorconfig', '.editorconfig');
     this.copy('jshintrc', '.jshintrc');
-    this.copy('Gruntfile.js');
+    this.copy('bowerrc', '.bowerrc');
+    this.template('Gruntfile.js');
 };
