@@ -21,7 +21,7 @@
     "test": "mocha"
   },
   "dependencies": {
-    "yeoman-generator": "~0.13.0",
+    "yeoman-generator": "~0.13.4",
     "cordova": "~2.9.0",
     "colors": "~0.6.0-1"
   },
