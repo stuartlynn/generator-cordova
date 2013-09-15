@@ -23,7 +23,7 @@ To deploy as local web server and watch for changes requires the installation of
 
 `grunt serve --platform=ios`: prepares and serves the application as a local web server at [http://localhost:8000/](http://localhost:8000/), watching for changes then preparing/redeploying the web server.
 
-`grunt ripple --platform=ios`
+`grunt ripple --platform=ios`: prepares and serves using ripple
 
 ### Serve to emulator
 `grunt emulate`: builds and emulates all installed platforms
@@ -42,7 +42,7 @@ To deploy as local web server and watch for changes requires the installation of
 `--family`: sets a family to build/emulate. eg. `--family=ipad`
 
 #### Example
-`grunt liveemulate --platform=ios --family=ipad`: builds and emulates the `ios` platform using the `ipad` family.
+`grunt live-emulate --platform=ios --family=ipad`: builds and emulates the `ios` platform using the `ipad` family.
 
 ## Experimental webapp Integration
 - If you select the yo webapp integration, you'll get the following:
