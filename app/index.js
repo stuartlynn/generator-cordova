@@ -84,29 +84,6 @@ CordovaGenerator.prototype.askFor = function askFor() {
     this.cwd = process.cwd();
 
     var prompts = [
-    {
-      name: 'appname',
-      message: 'What is the name of your app? (Spaces aren\'t allowed)',
-      default: 'HelloCordova'
-    }, {
-      name: 'packagename',
-      message: 'What would you like the package to be?',
-      default: 'io.cordova.hellocordova'
-    }, {
-      type: 'checkbox',
-      name: 'platforms',
-      message: 'What platforms would you like to add support for?',
-      choices: [
-        {
-          name: 'Android',
-          value: 'android',
-          checked: true
-        },
-        {
-          name: 'iOS',
-          value: 'ios',
-          checked: true
-        },
         {
             name: 'appname',
             message: 'What is the name of your app? (Spaces aren\'t allowed)',
@@ -209,14 +186,7 @@ CordovaGenerator.prototype.askFor = function askFor() {
             message: chalk.red('[Experimental]') + ': Would you like to run \'yo webapp\' and auto-setup with Cordova (if not we\'ll give you a more generic Grunt file)?',
             default: false
         }
-      ]
-    }, {
-      type: 'confirm',
-      name: 'runwebapp',
-      message: chalk.red('[Experimental]')+': Would you like to run \'yo webapp\' and auto-setup with Cordova (if not we\'ll give you a more generic Grunt file)?',
-      default: false
-    }
-  ];
+    ];
 
     this.prompt(prompts, function (props) {
         for (var key in props) {
